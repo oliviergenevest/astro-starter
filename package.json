@@ -16,7 +16,6 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^4.2.0",
-    "@astrojs/sitemap": "^3.4.1",
     "@datocms/astro": "^0.6.2",
     "@datocms/cda-client": "^0.2.6",
     "@datocms/cma-client": "^4.0.1",
@@ -40,9 +39,12 @@
     "react": "^18.3.1",
     "react-datocms": "^7.0.1",
     "react-dom": "^18.3.1",
+    "react-swift-reveal": "^1.2.4",
     "rfs": "^10.0.0",
     "serialize-error": "^11.0.3",
-    "typescript": "^5.5.4"
+    "sitemap": "^8.0.0",
+    "typescript": "^5.5.4",
+    "vite-plugin-bundlesize": "^0.2.0"
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.4",

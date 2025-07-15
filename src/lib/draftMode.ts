@@ -1,7 +1,10 @@
-import type { APIContext, AstroCookieSetOptions, AstroCookies } from 'astro';
+import type { APIContext, AstroCookieSetOptions, AstroCookies, AstroGlobal } from 'astro';
 import { DRAFT_MODE_COOKIE_NAME } from 'astro:env/client';
 import { SIGNED_COOKIE_JWT_SECRET } from 'astro:env/server';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
+import { PUBLIC_HOSTNAME } from 'astro:env/client';
+import { DRAFT_MODE_HOSTNAME } from 'astro:env/server';
+
 
 /**
  * Generates a JSON Web Token (JWT) that is used as a signed cookie for entering
@@ -67,4 +70,14 @@ export function draftModeHeaders(): HeadersInit {
   return {
     Cookie: `${DRAFT_MODE_COOKIE_NAME}=${jwtToken()};`,
   };
+}
+
+
+export function baseUrl(requestOrAstro: Request | AstroGlobal) {
+  /* const draftMode = isDraftModeEnabled(contextOrCookies);
+   return DRAFT_MODE_HOSTNAME === 'localhost'
+    ? 'http://localhost:4321'
+    : `https://${draftMode ? DRAFT_MODE_HOSTNAME : PUBLIC_HOSTNAME}`;
+    */
+  return PUBLIC_HOSTNAME;
 }

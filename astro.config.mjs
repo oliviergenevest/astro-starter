@@ -1,18 +1,40 @@
 import { defineConfig, envField } from 'astro/config';
 import icon from 'astro-icon';
 import react from '@astrojs/react';
-
-import sitemap from '@astrojs/sitemap';
+import bundlesize from 'vite-plugin-bundlesize';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://astro-starter.oliviergenevest.info',
   output: 'server',
+  trailingSlash: 'never',
+  base: '/',
   security: {
     checkOrigin: false,
   },
-
+ vite: {
+    plugins: [
+      bundlesize({
+        limits: [{ name: '**/*', limit: '500 kB' }],
+        stats: 'summary',
+      }),
+    ],
+    build: {
+      sourcemap: 'hidden',
+    },
+  },
   env: {
     schema: {
+      DRAFT_MODE_HOSTNAME: envField.string({
+        context: 'server',
+        access: 'secret',
+        default: 'localhost',
+      }),
+      PUBLIC_HOSTNAME: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
       DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN: envField.string({
         context: 'server',
         access: 'secret',
@@ -42,7 +64,6 @@ export default defineConfig({
   },
    site: 'https://http://localhost:4321',
   integrations: [
-    sitemap(),
     react(),
     icon({
       iconDir: 'src/icons',
