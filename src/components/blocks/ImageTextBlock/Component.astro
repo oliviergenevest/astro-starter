@@ -1,0 +1,77 @@
+---
+import { type FragmentOf, readFragment } from '~/lib/datocms/graphql';
+import { ImageTextBlockFragment } from './fragments';
+import { ResponsiveImage } from '~/components/ResponsiveImage';
+import { Wrapper } from '~/components/Wrapper';
+
+interface Props {
+  block: FragmentOf<typeof ImageTextBlockFragment>;
+}
+
+const { block } = Astro.props;
+//console.log(block);
+
+// Read unmasked block from fragment
+const unmaskedBlock = readFragment(ImageTextBlockFragment, block);
+---
+
+<section class="image-text_wrapper grid">
+  <div class="image">
+    <ResponsiveImage data={unmaskedBlock.image.responsiveImage} imgClass="rounded" />
+  </div>
+  <div set:html={unmaskedBlock.text} class="text" />
+</section>
+
+<style>
+  .image-text_wrapper {
+    border-radius: 8px;
+
+    padding: 48px;
+    background-color: var(--color-darkcream);
+    margin-bottom: 32px;
+    @media screen and (max-width: 768px) {
+      padding: 16px;
+    }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+    position: relative;
+  }
+
+  .image {
+    position: relative;
+    min-width: 300px;
+    display: block;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .rounded {
+    border-radius: 4px;
+  }
+
+  .text {
+    flex: 2 1 auto;
+    position: relative;
+    display: block;
+    :global(p) {
+      color: var(--color-black);
+    }
+  }
+  @media screen and (max-width: 890px) {
+    .image {
+      min-width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .image {
+      width: 100%;
+    }
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

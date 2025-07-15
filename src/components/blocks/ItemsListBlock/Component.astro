@@ -1,0 +1,71 @@
+---
+import { type FragmentOf, readFragment } from '~/lib/datocms/graphql';
+import { ItemsListBlockFragment } from './fragments';
+import { Wrapper } from '~/components/Wrapper';
+import { Card } from '~/components/Card';
+
+interface Props {
+  block: FragmentOf<typeof ItemsListBlockFragment>;
+}
+
+const { block } = Astro.props;
+//console.log(block);
+
+// Read unmasked block from fragment
+const unmaskedBlock = readFragment(ItemsListBlockFragment, block);
+---
+
+<Wrapper as="div" class:list={['grid_card_listing', unmaskedBlock.format]}>
+  {unmaskedBlock.items.map((item) => <Card data={item} />)}
+</Wrapper>
+
+<style>
+  .grid_card_listing {
+    padding: 48px;
+    background-color: var(--color-darkcream);
+    display: grid;
+    gap: rfs(32px);
+    border-radius: 8px;
+    @media screen and (max-width: 768px) {
+      padding: 16px;
+    }
+  }
+
+  :global(.homepage) .grid_card_listing {
+    background: inherit;
+    padding-left: 0;
+    padding-top: 16px;
+    padding-bottom: 8px;
+  }
+
+  .big {
+    grid-template-columns: repeat(2, 1fr);
+    @media screen and (max-width: 610px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .small {
+    grid-template-columns: repeat(4, 1fr);
+    @media screen and (max-width: 850px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media screen and (max-width: 500px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media screen and (max-width: 200px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .medium {
+    grid-template-columns: repeat(3, 1fr);
+
+    @media screen and (max-width: 850px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media screen and (max-width: 500px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+</style>

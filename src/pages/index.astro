@@ -1,0 +1,108 @@
+---
+import { graphql } from '~/lib/datocms/graphql';
+import { Layout } from '../layouts/Layout';
+import { TagFragment } from '~/lib/datocms/commonFragments';
+import { executeQuery } from '~/lib/datocms/executeQuery';
+import { getImage } from 'astro:assets';
+
+import { isDraftModeEnabled } from '~/lib/draftMode';
+import { DraftModeQueryListener } from '~/components/DraftModeQueryListener';
+
+import { HomepageSectionBlock } from '~/components/blocks/HomepageSectionBlock';
+import { HomepageSectionBlockFragment } from '~/components/blocks/HomepageSectionBlock/fragments';
+
+import { Wrapper } from '~/components/Wrapper';
+import { Title } from '~/components/Title';
+
+/**
+ * The GraphQL query that will be executed for this route to generate the homepage
+ * content and metadata.
+ *
+ * Thanks to gql.tada, the result will be fully typed!
+ */
+const query = graphql(
+  /* GraphQL */ `
+    query HomepageQuery {
+      homepage {
+        _seoMetaTags {
+          ...TagFragment
+        }
+        title
+        id
+        ctaText
+        backgroundImage {
+          url
+        }
+        backgroundColor {
+          hex
+        }
+        _firstPublishedAt
+        homepageSections {
+          ...HomepageSectionBlockFragment
+        }
+      }
+    }
+  `,
+  [TagFragment, HomepageSectionBlockFragment],
+);
+
+const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
+const { homepage } = await executeQuery(query, { includeDrafts: draftModeEnabled });
+
+if (!homepage) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found',
+  });
+}
+
+const optimizedBgImage = await getImage({ src: homepage.backgroundImage.url, inferSize: true });
+//console.log( "optimizedBgImage",optimizedBgImage.src);
+---
+
+<Layout additionalSeo={homepage._seoMetaTags} backgroundColor="var(--color-cream)">
+  <div class="section_cta" style={`--urlimg: url('${optimizedBgImage.src}');`}>
+    <Wrapper> <div class="content" set:html={homepage.ctaText} /></Wrapper>
+  </div>
+  <Wrapper class="wrapper homepage">
+    {homepage.homepageSections.map((item) => <HomepageSectionBlock block={item} />)}
+  </Wrapper>
+
+  <!--<div>Published at {homepage._firstPublishedAt}</div> -->
+
+  <DraftModeQueryListener query={query} />
+</Layout>
+
+<style>
+  .section_cta {
+    min-height: 500px;
+    min-height: calc(100vh - 232px);
+    display: flex;
+    align-items: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.15)), var(--urlimg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    margin-bottom: 30px;
+  }
+
+  .content {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    :global(h1) {
+      color: var(--color-cream);
+      font-family: var(--font-headline);
+      text-transform: uppercase;
+      font-weight: normal;
+    }
+  }
+  .homepage :global(.subtitle p) {
+    color: var(--color-white);
+  }
+  .homepage :global(.card_title) {
+    color: var(--color-white);
+  }
+</style>

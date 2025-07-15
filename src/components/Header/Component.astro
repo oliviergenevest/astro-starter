@@ -1,0 +1,64 @@
+---
+import { NavigationMobile } from '~/components/NavigationMobile';
+import Hamburger from '../Hamburger.astro';
+import { Icon } from 'astro-icon/components';
+---
+
+<div class="hidingHeader" id="hidingHeader">
+  <div class="header hidingHeader-in">
+    <a href="/" title="Page d'accueil">
+      <Icon class="brandlogo"  name="lesondupapier-logo" />
+    </a>
+    <NavigationMobile />
+    <Hamburger />
+  </div>
+</div>
+
+
+<style>
+  [data-icon='lesondupapier-logo'] {
+    font-size: 10rem;
+    padding-top: 16px;
+  }
+
+  .header {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background: var(--color-cream);
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    @media (max-width: 770px) {
+      padding: 16px 10px;
+      padding-top: 0;
+      align-items: center;
+      align-content: center;
+      justify-content: space-between;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+  .brandlogo {
+    width: 90%;
+    height: auto;
+  }
+}
+</style>
+
+<script>
+  import { hidingHeader } from 'hiding-header';
+
+  window.addEventListener('load', (event) => {
+    const container = document.querySelector('#hidingHeader') as HTMLElement;
+    hidingHeader(container);
+   
+    document.querySelector('.overlay')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('.menu-icon')?.classList.toggle('is-opened');
+      document.querySelector('nav.mobile_nav')?.classList.toggle('expanded');
+      document.querySelector('html')?.classList.toggle('menu_open');
+      document.querySelector('body')?.classList.toggle('menu_open');
+    });
+   
+  });
+</script>

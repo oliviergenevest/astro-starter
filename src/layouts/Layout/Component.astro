@@ -1,0 +1,51 @@
+---
+import { TagFragment } from '~/lib/datocms/commonFragments';
+import { executeQuery } from '~/lib/datocms/executeQuery';
+import { graphql } from '~/lib/datocms/graphql';
+import { DraftModeToggler } from '~/components/DraftModeToggler';
+import { Seo, type TitleMetaLinkTag } from '@datocms/astro';
+import { isDraftModeEnabled } from '~/lib/draftMode';
+import Footer from '~/components/Footer/Footer.astro';
+import { BaseLayout } from '../BaseLayout';
+import { Icon } from 'astro-icon/components';
+import { Subheader } from '~/components/Subheader';
+import { Header } from '~/components/Header';
+import { fade } from "astro:transitions";
+
+type Props = {
+  additionalSeo?: TitleMetaLinkTag[];
+  
+};
+
+const { additionalSeo = [] } = Astro.props;
+
+const query = graphql(
+  /* GraphQL */ `
+    query RootQuery {
+      _site {
+        faviconMetaTags {
+          ...TagFragment
+        }
+      }
+    }
+  `,
+  [TagFragment],
+);
+
+const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
+const result = await executeQuery(query, { includeDrafts: draftModeEnabled });
+---
+
+<BaseLayout
+  seo={[...result._site.faviconMetaTags, ...additionalSeo]}
+  
+>
+  <Subheader />
+  
+  <Header />
+  <div  id="site">
+     <slot />
+  </div>
+  {/*  <DraftModeToggler />*/}
+  <Footer />
+</BaseLayout>

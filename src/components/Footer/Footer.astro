@@ -1,0 +1,102 @@
+---
+import { graphql } from '~/lib/datocms/graphql';
+import { executeQuery } from '~/lib/datocms/executeQuery';
+import { Wrapper } from '../Wrapper';
+import { isDraftModeEnabled } from '~/lib/draftMode';
+import { DraftModeQueryListener } from '~/components/DraftModeQueryListener';
+import { PageLinkFragment } from '../linkToRecord/PageLink/fragments';
+import { PageInlineFragment } from '../inlineRecord/PageInline/fragments';
+import { StructuredText } from '@datocms/astro';
+import { PageLink } from '../linkToRecord/PageLink';
+import { PageInline } from '../inlineRecord/PageInline';
+import { Icons } from '../Icons';
+
+const query = graphql(
+  /* GraphQL */ `
+    query FooterQuery {
+      footer {
+        structuredFooter {
+          value
+          links {
+            ... on RecordInterface {
+              id
+              __typename
+            }
+            ...PageLinkFragment
+            ...PageInlineFragment
+          }
+        }
+      }
+    }
+  `,
+  [PageLinkFragment, PageInlineFragment],
+);
+
+const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
+const { footer } = await executeQuery(query, { includeDrafts: draftModeEnabled });
+
+if (!footer) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found',
+  });
+}
+---
+
+<footer>
+  <Wrapper>
+    <div class="socials"><Icons className="socials_footer" /></div>
+    <StructuredText
+      data={footer.structuredFooter}
+      linkToRecordComponents={/*
+       * If the structured text includes a link to another DatoCMS record,
+       * it's your decision to determine where the link should lead, or if
+       * you wish to customize its appearance:
+       */
+      {
+        PageRecord: PageLink,
+      }}
+      inlineRecordComponents={/*
+       * If the structured text includes a reference to another DatoCMS
+       * record, it's up to you to decide how to render them:
+       */
+      {
+        PageRecord: PageInline,
+      }}
+    />
+  </Wrapper>
+</footer>
+
+<style>
+  footer {
+    background-color: var(--color-cream);
+    padding: rfs(80px) 0;
+    margin-top: 80px;
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: rfs(8px);
+      :global(p) {
+        color: var(--color-black);
+        font-size: rfs(16px);
+      }
+      :global(.record_link) {
+        color: var(--color-black);
+        font-style: normal;
+        font-weight: normal;
+        padding: 0 8px;
+        &:hover {
+          text-decoration: underline;
+        }
+        &::after {
+          content: none;
+        }
+      }
+    }
+
+    .socials {
+      padding-bottom: 24px;
+    }
+  }
+</style>

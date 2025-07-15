@@ -1,0 +1,174 @@
+---
+import { graphql } from '~/lib/datocms/graphql';
+import { executeQuery } from '~/lib/datocms/executeQuery';
+import { isDraftModeEnabled } from '~/lib/draftMode';
+import { DraftModeQueryListener } from '~/components/DraftModeQueryListener';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+
+const { data } = Astro.props;
+
+const query = graphql(/* GraphQL */ `
+  query AgendaQuery($currentDate: Date!) {
+    upcomingEvents: allAgendas(
+      filter: { startDate: { gt: $currentDate } }
+      orderBy: startDate_ASC
+    ) {
+      startDate
+      endDate
+      city
+      location
+      content
+      spectacle {
+        slug
+        title
+      }
+    }
+
+    pastEvents: allAgendas(filter: { startDate: { lt: $currentDate } }, orderBy: startDate_DESC) {
+      startDate
+      endDate
+      city
+      location
+      content
+      spectacle {
+        slug
+        title
+      }
+    }
+  }
+`);
+const variables = { currentDate: format(new Date(), 'yyyy-MM-dd') };
+//console.log('DATE DU JOUR UTILISEE POUR LES REQUETES AGENDA =============', variables.currentDate);
+
+const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
+
+const { upcomingEvents, pastEvents } = await executeQuery(query, {
+  includeDrafts: draftModeEnabled,
+  variables: variables,
+});
+
+var events = [];
+if (data.passedEvents) {
+  events = data.numberEvents > 0 ? pastEvents.slice(0, data.numberEvents) : pastEvents;
+} else {
+  events = data.numberEvents > 0 ? upcomingEvents.slice(0, data.numberEvents) : upcomingEvents;
+}
+
+if (events.length === 0) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found',
+  });
+}
+---
+
+<div class="agenda_wrapper">
+  {
+    events.map((item) => (
+      <div class="agenda_item">
+        <div class="date">
+          {!item.endDate
+            ? format(new Date(item.startDate), 'dd LLL yyyy', { locale: fr })
+            : format(new Date(item.startDate), 'dd LLL', { locale: fr }) +
+              ' au ' +
+              format(new Date(item.endDate), 'dd LLL yyyy', { locale: fr })}
+        </div>
+        <div class="infos">
+          <div class="city_location">
+            {data.displayName && (
+              <div class="spectacle_name">
+                <a href={'/spectacle/' + item.spectacle.slug}>{item.spectacle.title}</a>
+              </div>
+            )}
+            <>
+              <div set:html={item.location} class="location" />
+              <div class="city">{item.city}</div>
+            </>
+          </div>
+          <div class="content" set:html={item.content} />
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .agenda_wrapper {
+    display: flex;
+    border-radius: 8px;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px;
+    background-color: var(--color-darkcream);
+    margin-bottom: 32px;
+    @media screen and (max-width: 768px) {
+      padding: 16px;
+    }
+  }
+
+  .agenda_item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    font-size: 18px;
+    gap: 32px;
+    @media screen and (max-width: 600px) {
+      gap: 4px;
+      flex-direction: column;
+    }
+  }
+
+  .date {
+    width: 125px;
+
+    font-weight: bold;
+    flex-shrink: 0;
+    color: var(--color-black);
+    text-transform: uppercase;
+    @media screen and (max-width: 600px) {
+      width: 100%;
+      border-bottom: 1px solid rgb(217 162 45);
+    }
+  }
+
+  .spectacle_name {
+    text-transform: uppercase;
+    color: var(--color-yellow);
+    font-weight: bold;
+    padding-right: 8px;
+  }
+
+  .city_location {
+    text-transform: uppercase;
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+    font-weight: normal;
+    color: var(--color-darkblue);
+  }
+
+  .location :global(p) {
+    line-height: normal;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    padding-right: 8px;
+    color: var(--color-darkblue);
+  }
+
+  .city {
+    font-weight: bold;
+  }
+
+  .content :global(p) {
+    font-size: 16px;
+    color: var(--color-black);
+    line-height: normal;
+  }
+
+  .infos {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

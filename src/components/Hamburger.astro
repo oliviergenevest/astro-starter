@@ -1,0 +1,116 @@
+---
+
+---
+
+<div class="menu-icon">
+  <div class="icon_span"></div>
+  <svg x="0" y="0"  width="54px" height="54px" viewBox="0 0 54 54">
+    <path d="M16.500,27.000 C16.500,27.000 24.939,27.000 38.500,27.000 C52.061,27.000 49.945,15.648 46.510,11.367 C41.928,5.656 34.891,2.000 27.000,2.000 C13.193,2.000 2.000,13.193 2.000,27.000 C2.000,40.807 13.193,52.000 27.000,52.000 C40.807,52.000 52.000,40.807 52.000,27.000 C52.000,13.000 40.837,2.000 27.000,2.000"></path>
+  </svg> 
+</div>
+
+<style>
+  
+.menu-icon{
+    position: relative;
+    width: 54px;
+    height: 54px;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: transform 0.5s;
+    z-index:12;
+    margin-right:12px;
+
+}
+
+.menu-icon .icon_span{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%); 
+    width: 22px;
+    height: 2px;
+    background-color: var(--color-yellow);
+    transition: background 0.5s, transform 0.5s;
+    transition: background 0.5s steps(1, end);
+}
+
+.icon_span::before, .icon_span::after{
+    transform-origin: 100% 50%;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 22px;
+    height: 2px;
+    transform: translateY(-8px);
+    background-color:var(--color-yellow);
+    transition: transform 0.5s;
+}
+
+.icon_span::after{
+    transform: translateY(8px);
+}
+
+.menu-icon:hover {
+  cursor:pointer;
+}
+
+.menu-icon:hover .icon_span::before{
+    transform: translateY(-10px);
+}
+
+.menu-icon:hover .icon_span::after{
+    transform: translateY(10px);
+}
+
+svg{
+    opacity: 0;
+    fill: transparent;
+    stroke: var(--color-yellow);
+    stroke-width: 2px;
+    stroke-dasharray: 22 230;
+    transition: stroke-dasharray 0.5s, stroke-dashoffset 0.5s, opacity 0.5s steps(1, end);
+}
+.menu-icon.is-opened {
+ /* position:fixed;
+  z-index: 900;
+  top:10px;
+  right:10px;*/
+}
+
+.menu-icon.is-opened .icon_span{
+    transition: background 0.5s steps(1, start);
+    background-color: transparent;
+}
+
+.menu-icon.is-opened svg{
+    opacity: 1;
+    stroke-dasharray: 160;
+    stroke-dashoffset: -65;
+    transition: stroke-dasharray 0.5s, stroke-dashoffset 0.5s, opacity 0.5s steps(1, start);
+}
+
+.menu-icon.is-opened .icon_span::before{
+    transform: translateX(-3px) translateY(-8px) rotate(-45deg);
+}
+
+.menu-icon.is-opened .icon_span::after{
+    transform: translateX(-3px) translateY(8px) rotate(45deg);
+}
+</style>
+<script>
+
+    window.addEventListener('load', (event) => {
+      document.querySelector('.menu-icon')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('.menu-icon')?.classList.toggle('is-opened');
+      document.querySelector('.mobile_nav')?.classList.toggle('expanded');
+      document.querySelector('html')?.classList.toggle('menu_open');
+      document.querySelector('body')?.classList.toggle('menu_open');
+    });
+  });
+
+ 
+</script>
