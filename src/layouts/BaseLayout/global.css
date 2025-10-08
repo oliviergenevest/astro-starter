@@ -1,6 +1,5 @@
 @import './variables.css';
 
-
 *,
 *::before,
 *::after {
@@ -24,11 +23,9 @@ body {
   font-family: var(--font-sans);
   font-size: rfs(18px);
   text-rendering: optimizeLegibility;
-  
+
   overflow-y: auto;
 }
-
-
 
 p {
   line-height: 28px;
@@ -38,8 +35,6 @@ p {
     line-height: 26px;
   }
 }
-
-
 
 .gallery {
   display: flex;
@@ -64,8 +59,6 @@ textarea,
 select {
   font: inherit;
 }
-
-
 
 mux-player {
   width: 100%;
@@ -180,35 +173,100 @@ mark.warning {
   }
 }
 
+.fade-in-top {
+	-webkit-animation: fade-in-top 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: fade-in-top 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+/**
+ * ----------------------------------------
+ * animation fade-in-top
+ * ----------------------------------------
+ */
+@-webkit-keyframes fade-in-top {
+  0% {
+    -webkit-transform: translateY(-50px);
+            transform: translateY(-50px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fade-in-top {
+  0% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.fade-in-bottom {
+	-webkit-animation: fade-in-bottom 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: fade-in-bottom 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@-webkit-keyframes fade-in-bottom {
+  0% {
+    -webkit-transform: translateY(20px);
+            transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fade-in-bottom {
+  0% {
+    -webkit-transform: translateY(20px);
+            transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
+
 blockquote footer {
   color: darkgrey;
 }
 
+.hidingHeader {
+  position: relative;
+  --hidingHeader-height: auto;
+  --hidingHeader-bounds-height: auto;
+  --hidingHeader-animation-offset: 0px;
+  z-index: 10;
+  height: var(--hidingHeader-bounds-height);
+  margin-bottom: calc(var(--hidingHeader-height) - var(--hidingHeader-bounds-height));
+  pointer-events: none;
+}
 
-  .hidingHeader {
-    position: relative;
-    --hidingHeader-height: auto;
-    --hidingHeader-bounds-height: auto;
-    --hidingHeader-animation-offset: 0px;
-    z-index: 10;
-    height: var(--hidingHeader-bounds-height);
-    margin-bottom: calc(var(--hidingHeader-height) - var(--hidingHeader-bounds-height));
-    pointer-events: none;
-  }
+.hidingHeader-in {
+  position: relative;
+  position: sticky;
+  top: 0;
+  pointer-events: auto;
+  transition: transform 0.2s;
+  transform: translateY(var(--hidingHeader-animation-offset));
+}
 
+@media (prefers-reduced-motion) {
   .hidingHeader-in {
-    position: relative;
-    position: sticky;
-    top: 0;
-    pointer-events: auto;
-    transition: transform 0.2s;
-    transform: translateY(var(--hidingHeader-animation-offset));
+    transition-duration: 1ms;
+    transition-timing-function: step-end;
   }
-
-  @media (prefers-reduced-motion) {
-    .hidingHeader-in {
-      transition-duration: 1ms;
-      transition-timing-function: step-end;
-    }
-  }
-
+}

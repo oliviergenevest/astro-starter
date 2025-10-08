@@ -2,18 +2,18 @@
 import { NavigationMobile } from '~/components/NavigationMobile';
 import Hamburger from '../Hamburger.astro';
 import { Icon } from 'astro-icon/components';
+
 ---
 
 <div class="hidingHeader" id="hidingHeader">
-  <div class="header hidingHeader-in">
+  <div class="header hidingHeader-in"  >
     <a href="/" title="Page d'accueil">
-      <Icon class="brandlogo"  name="lesondupapier-logo" />
+      <Icon class="brandlogo" name="lesondupapier-logo" />
     </a>
     <NavigationMobile />
     <Hamburger />
   </div>
 </div>
-
 
 <style>
   [data-icon='lesondupapier-logo'] {
@@ -25,7 +25,7 @@ import { Icon } from 'astro-icon/components';
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background: var(--color-cream);
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
     padding-bottom: 16px;
     @media (max-width: 770px) {
@@ -38,27 +38,32 @@ import { Icon } from 'astro-icon/components';
   }
 
   @media screen and (max-width: 600px) {
-  .brandlogo {
-    width: 90%;
-    height: auto;
+    .brandlogo {
+      width: 90%;
+      height: auto;
+    }
   }
-}
 </style>
 
 <script>
+  
   import { hidingHeader } from 'hiding-header';
 
-  window.addEventListener('load', (event) => {
+
+  document.addEventListener("astro:page-load", () => {
     const container = document.querySelector('#hidingHeader') as HTMLElement;
-    hidingHeader(container);
-   
-    document.querySelector('.overlay')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      document.querySelector('.menu-icon')?.classList.toggle('is-opened');
-      document.querySelector('nav.mobile_nav')?.classList.toggle('expanded');
-      document.querySelector('html')?.classList.toggle('menu_open');
-      document.querySelector('body')?.classList.toggle('menu_open');
+      hidingHeader(container);
+
+      document.querySelector('.overlay')?.addEventListener('click', (e) => {
+        console.log("click");
+        e.preventDefault();
+        document.querySelector('.menu-icon')?.classList.toggle('is-opened');
+        document.querySelector('nav.mobile_nav')?.classList.toggle('expanded');
+        document.querySelector('html')?.classList.toggle('menu_open');
+        document.querySelector('body')?.classList.toggle('menu_open');
     });
-   
+  
   });
+
+  
 </script>

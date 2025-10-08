@@ -1,4 +1,7 @@
-import {  rawExecuteQueryWithAutoPagination, executeQuery as libExecuteQuery } from '@datocms/cda-client';
+import {
+  rawExecuteQueryWithAutoPagination,
+  executeQuery as libExecuteQuery,
+} from '@datocms/cda-client';
 import {
   DATOCMS_DRAFT_CONTENT_CDA_TOKEN,
   DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN,

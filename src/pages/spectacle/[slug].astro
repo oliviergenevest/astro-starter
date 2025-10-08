@@ -123,7 +123,7 @@ const optimizedBgImage = await getImage({ src: spectacle.mainImage.url, inferSiz
 //console.log( "optimizedBgImage",spectacle.mainImage.responsiveImage);
 ---
 
-<Layout additionalSeo={spectacle._seoMetaTags} backgroundColor="var(--color-cream)">
+<Layout additionalSeo={spectacle._seoMetaTags} >
   <div class="intro" style={`--urlimg: url('${optimizedBgImage.src}');`}>
     {
       /* <div class="intro_background_image_wrapper" >
@@ -134,10 +134,10 @@ const optimizedBgImage = await getImage({ src: spectacle.mainImage.url, inferSiz
     </div> */
     }
     <Wrapper class="intro_content">
-      <div class="intro_title">
+      <div class="intro_title fade-in-top">
         {spectacle.title}
       </div>
-      <div class="intro_subtitle" set:html={spectacle.subtitle} />
+      <div class="intro_subtitle fade-in-bottom" set:html={spectacle.subtitle} />
     </Wrapper>
   </div>
   <Wrapper class="wide">

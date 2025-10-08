@@ -5,7 +5,6 @@ import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { PUBLIC_HOSTNAME } from 'astro:env/client';
 import { DRAFT_MODE_HOSTNAME } from 'astro:env/server';
 
-
 /**
  * Generates a JSON Web Token (JWT) that is used as a signed cookie for entering
  * Draft Mode.
@@ -71,7 +70,6 @@ export function draftModeHeaders(): HeadersInit {
     Cookie: `${DRAFT_MODE_COOKIE_NAME}=${jwtToken()};`,
   };
 }
-
 
 export function baseUrl(requestOrAstro: Request | AstroGlobal) {
   /* const draftMode = isDraftModeEnabled(contextOrCookies);

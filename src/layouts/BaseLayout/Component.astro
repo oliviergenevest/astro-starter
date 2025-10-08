@@ -2,16 +2,14 @@
 import { Seo, type TitleMetaLinkTag } from '@datocms/astro';
 import './reset.css';
 import './global.css';
-import { AstroFont } from "astro-font";
-import { ClientRouter } from "astro:transitions";
+import { AstroFont } from 'astro-font';
+import { ClientRouter } from 'astro:transitions';
 
 type Props = {
   seo: TitleMetaLinkTag[];
-
 };
 
 const { seo } = Astro.props;
-
 ---
 
 <!doctype html>
@@ -22,64 +20,62 @@ const { seo } = Astro.props;
     </style>-->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-   <ClientRouter/>
+   
 
     <meta name="generator" content={Astro.generator} />
-    <AstroFont 
-    config={[
+    <AstroFont
+      config={[
         {
-          name: "AtkinsonHyperlegible",
+          name: 'AtkinsonHyperlegible',
           src: [
             {
               style: 'bold',
               weight: '700',
-              path: './public/fonts/AtkinsonHyperlegible-Bold.woff2'
+              path: './public/fonts/AtkinsonHyperlegible-Bold.woff2',
             },
           ],
           preload: true,
-          display: "swap",
-          selector: "body",
-          fallback: "sans-serif",
+          display: 'swap',
+          selector: 'body',
+          fallback: 'sans-serif',
         },
         {
-          name: "AtkinsonHyperlegible",
+          name: 'AtkinsonHyperlegible',
           src: [
             {
               style: 'normal',
               weight: '400',
-              path: './public/fonts/AtkinsonHyperlegible-Regular.woff2'
+              path: './public/fonts/AtkinsonHyperlegible-Regular.woff2',
             },
           ],
           preload: true,
-          display: "swap",
-          selector: "body",
-          fallback: "sans-serif",
+          display: 'swap',
+          selector: 'body',
+          fallback: 'sans-serif',
         },
 
         {
-          name: "KirangHaerang",
+          name: 'KirangHaerang',
           src: [
             {
               weight: '400',
               style: 'normal',
-              path: './public/fonts/KirangHaerang-Regular.woff2'
-            }
+              path: './public/fonts/KirangHaerang-Regular.woff2',
+            },
           ],
           preload: true,
-          display: "swap",
-          fallback: "serif",
+          display: 'swap',
+          fallback: 'serif',
         },
       ]}
-    
     />
     <Seo data={[...seo]} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <slot name="head" />
+    <ClientRouter/>
   </head>
   <body>
     <slot />
   </body>
 </html>
-
-

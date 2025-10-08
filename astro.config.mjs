@@ -12,7 +12,7 @@ export default defineConfig({
   security: {
     checkOrigin: false,
   },
- vite: {
+  vite: {
     plugins: [
       bundlesize({
         limits: [{ name: '**/*', limit: '500 kB' }],
@@ -62,7 +62,7 @@ export default defineConfig({
     },
     validateSecrets: true,
   },
-   site: 'https://http://localhost:4321',
+  site: 'https://http://localhost:4321',
   integrations: [
     react(),
     icon({

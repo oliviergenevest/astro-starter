@@ -5,7 +5,6 @@ import { isDraftModeEnabled } from '~/lib/draftMode';
 import { DraftModeQueryListener } from '~/components/DraftModeQueryListener';
 import { Wrapper } from '~/components/Wrapper';
 
-
 const query = graphql(/* GraphQL */ `
   query NavigationQuery {
     allNavigations(orderBy: position_ASC) {
@@ -63,7 +62,6 @@ const pathSlug = pathname.replace(/\/$/, '').slice(1);
       ))
     }
   </ul>
- 
 </nav>
 <div class="overlay"></div>
 <style>
@@ -117,43 +115,40 @@ const pathSlug = pathname.replace(/\/$/, '').slice(1);
   }
 
   nav.mobile_nav {
-  
-
     /* nav responsive ci dessous pour mobile */
-   
-      display: block;
-      position: fixed;
-      z-index: 12;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      width: 0;
-      overflow: hidden;
+
+    display: block;
+    position: fixed;
+    z-index: 12;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    overflow: hidden;
+    height: 100vh;
+    background-color: var(--color-turquoise);
+
+    transition: all 0.15s ease-in;
+    ul {
+      display: flex;
+      flex-direction: column;
+      padding-top: 48px;
+      a,
+      a:hover {
+        color: var(--color-white);
+      }
+    }
+
+    .btn_close {
+      display: none;
+    }
+
+    &.expanded {
+      width: 250px;
       height: 100vh;
-      background-color: var(--color-turquoise);
 
-      transition: all 0.15s ease-in;
-      ul {
-        display: flex;
-        flex-direction: column;
-        padding-top: 48px;
-        a,
-        a:hover {
-          color: var(--color-white);
-        }
-      }
-
-      .btn_close {
-        display: none;
-      }
-
-      &.expanded {
-        width: 250px;
-        height: 100vh;
-
-        transition: width 0.2s ease-in-out;
-      }
-    
+      transition: width 0.2s ease-in-out;
+    }
   }
 
   html.menu_open .overlay {
@@ -167,17 +162,15 @@ const pathSlug = pathname.replace(/\/$/, '').slice(1);
     right: 0;
     bottom: 0;
     z-index: 11;
-   
-      display: block;
-    
+
+    display: block;
   }
 </style>
 <style is:global>
   html.menu_open {
-   
-    padding-right:12px;
+    padding-right: 12px;
   }
   body.menu_open {
-     overflow: hidden;
+    overflow: hidden;
   }
 </style>
